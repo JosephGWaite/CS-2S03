@@ -1,6 +1,12 @@
-import java.util.Arrays;
+/*
+Name: Joseph Waite
+MacID: waitejg
+Student Number: 1403712
+Description: prints the given arguements in reverse
+*/
 
-public class HelloWorld {
+
+class HWK1_waitejg {
 	public static void main(String[] args){
 		int len = args.length;
 		String output = "";
