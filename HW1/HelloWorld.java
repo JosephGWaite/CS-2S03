@@ -5,8 +5,8 @@ public class HelloWorld {
 		int len = args.length;
 		String output = "";
 		for(int i = len -1 ; i >= 0 ; i--){
-				output += args[i]
+			output += args[i] + " ";
 		}
-		system.log
+		System.out.println(output.substring(0, output.length() - 1));
 	}
 }
