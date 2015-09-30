@@ -16,7 +16,6 @@ class HWK2_waitejg {
 		// TEST CASES??
 
 		double matrixA[][] = {{1,2},{2,2}};
-
 		double matrixB[][] = {{50,60,55},{62,65,70},{72,66,77}};
 		// double ans[][]= multi(matrixA, matrixB);
 		LU_Decomp(matrixB);
@@ -60,12 +59,12 @@ class HWK2_waitejg {
 		// is is square?
 		// We could through some other checks in here.
 		// non square matricies do not have an inverse
-		//
+		// psudeoinverse?
 		return true;
 	}
 
 	public static void LU_Decomp(double matrixA[][]) {
-		// http://www.gamedev.net/page/resources/_/technical/math-and-physics/matrix-inversion-using-lu-decomposition-r3637
+		//http://www.gamedev.net/page/resources/_/technical/math-and-physics/matrix-inversion-using-lu-decomposition-r3637
 		int n = matrixA[0].length;
 		double[][] lower = new double[n][n];
 		double[][] upper = new double[n][n];
@@ -76,34 +75,27 @@ class HWK2_waitejg {
 
 		lower[0][0] = matrixA[0][0];
 		for (int j = 1; j < n; j++){ //sets first column of lower, and first row of upper to match matrixA
-			System.out.println("79 j: " + j);
 			lower[j][0]= matrixA[j][0];
 			upper[0][j]= matrixA[0][j] / lower[0][0];
 
 		}
 		for (int j = 1; j < n -1; j++) { // for j from 1 -> n-1
-			for (int i = j; i < n; i++) { // for i from j -> n //Compute a lower matrix, not working correctly. 
-				System.out.println("86 j: " + j + " i: " + i);
+			for (int i = j; i < n; i++) { // for i from j -> n //Compute a lower matrix
 				lower[i][j] = matrixA[i][j];
 				for (int k = 0; k < j; k++) { // for k from 0 -> j-1
-					System.out.println("88 j: " + j +" i: " + i + " k: " +k);
 					lower[i][j] = lower[i][j] - lower[i][k] * upper[k][j];
 				}
 			}
 			for (int k = j+1; k < n; k++) { //Compute upper, not working. 
 				upper[j][k] = matrixA[j][k];
-				System.out.println("94 j: " + j + " k: " +k);
 				for (int i = 0; i < j; i++) {
-					System.out.println("96 j: " + j +" i: " + i + " k: " +k);
 					upper[j][k] = upper[j][k] - lower[j][i] * upper[i][k];
 				}
 				upper[j][k] = upper[j][k] / lower[j][j];
 			}
 		}
-		System.out.println("What The Fuck");
 		lower[n-1][n-1] = matrixA[n-1][n-1];
 		for (int k = 0; k < n-1; k++){
-			System.out.println("103 k: " +k);
 			lower[n-1][n-1] = lower[n-1][n-1] - lower[n-1][k]*upper[k][n-1]; 
 		}
 		System.out.println("LOWER: " + Arrays.deepToString(lower));
