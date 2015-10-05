@@ -11,56 +11,78 @@ import java.util.Arrays;
 class HWK2_waitejg {
 
 	public static void main(String[] args) { // main method
-		// TODO
-		// Take args and make them into matricies
-		// TEST CASES??
+		//Please ignore my doubles.
 
-		double matrixA[][] = {{1,2},{2,2}};
-		double matrixB[][] = {{50,60,55},{62,65,70},{72,66,77}};
-		// double ans[][]= multi(matrixA, matrixB);
-		LU_Decomp(matrixB);
+		//double matrixA[][] = {{1,2},{2,2}}; //for testing purposes
+        //double matrixB[][] = {{50,60,55},{62,65,70},{72,66,77}}; //for testing purposes 
+
+		double[] argsInt = Arrays.stream(args).mapToDouble(Double::parseDouble).toArray(); // String[] args --> int[] args 
+		double numMatricies = argsInt[0]; //number of matricies given in args;
+		double[][][] ourArrays = new double[Integer.parseInt(args[0])][][]; //initalise our list of 2D arrays
+
+		double start = (numMatricies * 2) + 1; //when we do copyOfRange we need to specify where in args[] 
+											//does our actualy array values start
+
+		double skipValue = start; //the length of the array we copy 
+		for (int i = 0; i < numMatricies; i++) //Here we create our arrays from the args list 
+		{
+			double m = argsInt[(i * 2) + 1]; //how many rows does the matrix have?
+			double n = argsInt[(i * 2) + 2]; //how many columns does the matric have? 
+			double[] dlist = Arrays.copyOfRange(argsInt, (int) skipValue, (int) (skipValue + (m*n))); //grab all values of a matrix from args
+			ourArrays[i] = Dto2D(dlist, (int) m, (int) n); //transform those 1D values into a 2D array; add that array to our array of arrays
+			skipValue = skipValue + (m * n); //get the length of the next array
+		}
+
+		double[][] acc = null;  //our accumulator for multiplication 
+								// If i didn't leave this till last min
+								// then I would try to curry it
+		double[][] temp = ourArrays[0]; // temp array to hold product
+
+		for (int i = 1; i < numMatricies; i++){ // multiply our arrays together using a temp value 
+			acc = multi(temp, ourArrays[i]); //array[i] * array[i+1]
+			temp = acc;
+		}
+		LU_Decomp(acc); //return the inverse
 	}
 
-	public static double[][] multi(double matrixA[][], double matrixB[][]) { // multiplication
-																				// method
+	public static double[][] multi(double matrixA[][], double matrixB[][]) { // multiplication																			// method
 		/*
-		 * //Naive matrix multiplication algorithm
+		 *
+		 * Naive matrix multiplication algorithm
 		 * 
-		 * Input: matrices A[n][m] and B[m][p] Let C be a new matrix of [n][p]
-		 * size For i from 1 to n: For j from 1 to p: For k from 1 to m: Set sum
-		 * ← sum + A[i][k] × B[k][j] Set C[i][j] ← sum Return C
 		 */
-		System.out.println(Arrays.deepToString(matrixA));
-		System.out.println(Arrays.deepToString(matrixB));
 
 		int n = matrixA[0].length; // get column dimension
 		int m = matrixB.length; // get row dimensiom
 		int p = matrixB[0].length; // get column dimension
-
-		System.out.println(n + " " + m + " " + p);
 
 		if (m != matrixA.length) { // If dimensionons are invalid.
 			throw new Error("Multiplication Error");
 		}
 
 		double[][] matrixC = new double[m][p];
+		//We just go through the row and columns
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < p; j++) {
 				for (int k = 0; k < n; k++) {
-					System.out.println("i: " + i + " j: " + j + " k: " + k);
-					matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+					matrixC[i][j] += matrixA[i][k] * matrixB[k][j]; //and we multiply them together
 				}
 			}
 		}
-		return matrixC;
+		return matrixC; //return the answer
 	}
 
-	public static boolean isInvertible(double matrix[][]) {
-		// is is square?
-		// We could through some other checks in here.
-		// non square matricies do not have an inverse
-		// psudeoinverse?
-		return true;
+	public static double[][] Dto2D(double list[], int m, int n){
+		//Takes an 1D int array, # of rows, # of columns, and return a 2D array
+		double[][] matrix = new double[m][n]; // initalise our matrix 
+		int i = 0; //initialse the counter
+		for (int j = 0; j < m; j++){ // rows 
+			for(int k = 0; k < n; k++){ //columns 
+				matrix[j][k]=list[i]; //
+				i++; //increment counter 
+			}
+		}
+		return matrix;
 	}
 
 	public static void LU_Decomp(double matrixA[][]) {
@@ -69,7 +91,7 @@ class HWK2_waitejg {
 		double[][] lower = new double[n][n];
 		double[][] upper = new double[n][n];
 
-		for (int i = 0; i < n; i++) { // Identity matrix, get money
+		for (int i = 0; i < n; i++) { // Identity matrix
 			upper[i][i] = 1; //set the diagonals to 1
 		} //end loop 
 
@@ -86,17 +108,17 @@ class HWK2_waitejg {
 					lower[i][j] = lower[i][j] - lower[i][k] * upper[k][j];
 				}
 			}
-			for (int k = j+1; k < n; k++) { //Compute upper, not working. 
+			for (int k = j+1; k < n; k++) { //Compute upper
 				upper[j][k] = matrixA[j][k];
 				for (int i = 0; i < j; i++) {
 					upper[j][k] = upper[j][k] - lower[j][i] * upper[i][k];
 				}
-				upper[j][k] = upper[j][k] / lower[j][j];
+				upper[j][k] = upper[j][k] / lower[j][j]; //what if this is 0? It won't be?
 			}
 		}
 		lower[n-1][n-1] = matrixA[n-1][n-1];
 		for (int k = 0; k < n-1; k++){
-			lower[n-1][n-1] = lower[n-1][n-1] - lower[n-1][k]*upper[k][n-1]; 
+			lower[n-1][n-1] = lower[n-1][n-1] - lower[n-1][k]*upper[k][n-1]; //Finally finished the lower matrix
 		}
 		System.out.println("LOWER: " + Arrays.deepToString(lower));
 		System.out.println("UPPER: " + Arrays.deepToString(upper));
