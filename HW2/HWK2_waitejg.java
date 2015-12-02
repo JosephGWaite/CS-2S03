@@ -8,13 +8,8 @@
 
 import java.util.Arrays;
 
-class HWK2_waitejg {
-
+public class HWK2_waitejg {
 	public static void main(String[] args) { // main method
-		//Please ignore my doubles.
-
-		//double matrixA[][] = {{1,2},{2,2}}; //for testing purposes
-        //double matrixB[][] = {{50,60,55},{62,65,70},{72,66,77}}; //for testing purposes 
 
 		double[] argsInt = Arrays.stream(args).mapToDouble(Double::parseDouble).toArray(); // String[] args --> int[] args 
 		double numMatricies = argsInt[0]; //number of matricies given in args;
@@ -42,7 +37,7 @@ class HWK2_waitejg {
 			acc = multi(temp, ourArrays[i]); //array[i] * array[i+1]
 			temp = acc;
 		}
-		LU_Decomp(acc); //return the inverse
+		LUinvert(acc); //return the inverse
 	}
 
 	public static double[][] multi(double matrixA[][], double matrixB[][]) { // multiplication																			// method
@@ -85,8 +80,9 @@ class HWK2_waitejg {
 		return matrix;
 	}
 
-	public static void LU_Decomp(double matrixA[][]) {
-		//http://www.gamedev.net/page/resources/_/technical/math-and-physics/matrix-inversion-using-lu-decomposition-r3637
+	public static void LUinvert(double matrixA[][]) {
+		//This is incomplete, I'm not sure what to do once I have the lower and upper matrix
+
 		int n = matrixA[0].length;
 		double[][] lower = new double[n][n];
 		double[][] upper = new double[n][n];
@@ -120,7 +116,5 @@ class HWK2_waitejg {
 		for (int k = 0; k < n-1; k++){
 			lower[n-1][n-1] = lower[n-1][n-1] - lower[n-1][k]*upper[k][n-1]; //Finally finished the lower matrix
 		}
-		System.out.println("LOWER: " + Arrays.deepToString(lower));
-		System.out.println("UPPER: " + Arrays.deepToString(upper));
 	}
 }
