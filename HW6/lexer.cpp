@@ -46,7 +46,12 @@ Token parse_char(char c) {
 //I'm going to do more here. l8ter tho bb
 
 Token lex_num(char c) {
-	return {num_token, c};
+	std::stringstream ss;
+	std::string target;
+
+	ss << c;
+	ss >> target;
+	return {num_token, target};
 }
 
 Token lex_op(char c) {
@@ -81,12 +86,18 @@ Token lex_op(char c) {
 }
 
 Token lex_paren(char c) {
+	std::stringstream ss;
+	std::string target;
+
+	ss << c;
+	ss >> target;
+
 	switch (c) {
 	case '(' :
-		return {open_token, c};
+		return {open_token, target};
 		break;
 	case ')' :
-		return {close_token, c};
+		return {close_token, target};
 		break;
 	}
 }
