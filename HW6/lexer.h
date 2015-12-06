@@ -2,7 +2,9 @@
 #define LEXER_H
 
 #include "token.h"
+#include <istream>
+#include <vector>
 
-Token parse_char(char c);
+std::vector<Token> parse_char(std::istream& c);
 
 #endif

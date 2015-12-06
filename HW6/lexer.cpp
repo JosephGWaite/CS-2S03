@@ -1,13 +1,15 @@
 #include "lexer.h"
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <vector>
 
 //This is sort of a parser at this point.
 //Should be broken into parser.{h,cpp}
 
-Token lex_op(char);  //{ = | - | * | / } //TODO add type
-Token lex_num(char); // {digits}
-Token lex_paren(char); // { ( | ) }
+Token lex_op(std::istream&);  //{ = | - | * | / } //TODO add type
+Token lex_num(std::istream&); // {digits}
+Token lex_paren(std::istream&); // { ( | ) }
 
 bool isop(char c) {
 	std::string const ops = "+-*/"; //I'd like to add more.
@@ -22,53 +24,75 @@ bool isop(char c) {
 //	so we can make it into a tree.
 //this should just be run on each char in the user input.
 
-Token parse_char(char c) {
-	if (std::isdigit(c))
-		return lex_num(c);
+std::vector<Token> parse_char(std::istream& our_stream) {
 
-	else if (isop(c)) {
-		return lex_op(c);
 
-	} else if (c == '(') {
-		return lex_paren(c);
+	//skip over whitespace!!
+	std::vector<Token> listOfTokens;
 
-	} else if (c == ')') {
-		return lex_paren(c);
+	// while (our_stream.peek() == ' ')
+	// 	our_stream.ignore(1, ' ');
 
-	} else {
-		// TODO: error handling. throw exception and catch at print?
-		// maybe an error token?
-		//
+
+	//if (!our_stream) return idk
+
+	char c;
+
+	while (our_stream.get(c)) { //as long as we can grab a char then do our loop.
+		our_stream.unget(); //put the char we grabbed back.
+
+		if (c == ' ') { //Ignore whitespace.
+			our_stream.get();
+
+		} else if (c == '(') {
+			listOfTokens.push_back(lex_paren(our_stream));
+
+		} else if (c == ')') {
+			listOfTokens.push_back(lex_paren(our_stream));
+
+		} else if (isop(c)) {
+			listOfTokens.push_back(lex_op(our_stream));
+
+		} else if (std::isdigit(c)) {
+			listOfTokens.push_back(lex_num(our_stream));
+		} else {
+			std::cout << "UNRECOGNISED CHAR";
+			break;
+		}
 	}
 
+	return listOfTokens;
 }
 
 //I'm going to do more here. l8ter tho bb
 
-Token lex_num(char c) {
-	std::stringstream ss;
-	std::string target;
-
-	ss << c;
-	ss >> target;
-	return {num_token, target};
+Token lex_num(std::istream& our_stream) {
+	char c;
+	our_stream.get(c);
+	std::string number;
+	number.push_back(c);
+	while (std::isdigit(our_stream.peek())) {
+		char x;
+		our_stream.get(x);
+		number.push_back(x);
+	}
+	return {num_token, number};
 }
 
-Token lex_op(char c) {
+Token lex_op(std::istream& our_stream) {
 
 	//This pos here is how stack says to do string coversion.
 	//I assume that beacuse i have to do string conversion,
-	// then I should restructure. 
-	// 
-	// I actually have to bc lex_num can't take a number bigger than 9
-	// fuck. TODO: ^^^ 
+	// then I should restructure.
+	//
+	char c;
+	our_stream.get(c);
+
 	std::stringstream ss;
 	std::string target;
 
 	ss << c;
 	ss >> target;
-
-
 	switch (c) {
 	case '+':
 		return {add_token, target};
@@ -85,7 +109,10 @@ Token lex_op(char c) {
 	}
 }
 
-Token lex_paren(char c) {
+Token lex_paren(std::istream& our_stream) {
+	char c;
+	our_stream.get(c);
+
 	std::stringstream ss;
 	std::string target;
 
