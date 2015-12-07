@@ -11,9 +11,10 @@
 			a. loop through the infix notation tokens
 			b. compare them against a set of rules
 				i) equal # of open and closing parens
-				ii) cannot have weird signage like /* ++ --
+				ii) cannot have weird signage like /* ++ 
 				iii) just come up with a set of rules for these
 			c. if validate fails, throw an error
+			d. check piazza for info. 
 		
 	2.	 Convert to postfix notation
 	3.	 from postfix -> make the expression tree.
