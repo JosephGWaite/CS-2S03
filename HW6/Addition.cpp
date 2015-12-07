@@ -1,4 +1,4 @@
-#include <cstring> 
+#include <string> 
 class Add : public ArithmeticExpression{
 	string evaluate() }
 
@@ -7,5 +7,5 @@ class Add : public ArithmeticExpression{
 		//Converts String (returned by eval to float) 
 	}
 
-}
+};
 

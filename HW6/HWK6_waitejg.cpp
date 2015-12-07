@@ -7,34 +7,23 @@
 
 //BIG LIST OF TODOS:
 /*
-	1. 	How we we redo parsing? We cannot call parse char on each;
-	make it parse token and it figure out the token length on its own,
-
-		a. bugs include whitespace casuing core dump
-		b. we need to handle -5 + 1, 1 + -5, etc
-
-	2.	 We've gotta work around the types given in the assignment
-	I think we should do parsing by stream,
-	then convert out vector of tokens to whatever the assngment says
-
-	3.	 Figure out the recursion things + how we handle bedmas.
-	I think its done properly already.
-
+	1. 	 We need a validator.
+			a. loop through the infix notation tokens
+			b. compare them against a set of rules
+				i) equal # of open and closing parens
+				ii) cannot have weird signage like /* ++ --
+				iii) just come up with a set of rules for these
+			c. if validate fails, throw an error
+		
+	2.	 Convert to postfix notation
+	3.	 from postfix -> make the expression tree.
 	4. 	 Make the trees with recursion.
-	5. 	 Then we need to do a sort of graph reduction. cool
-	6. 	 Make it more modular, add classes.
-	7.
-Thought on parsing
-
-while(std::cin != "#"){
-	then pass the cin stream to the tokenizer
-	tokeniser(std::cin)
-	{
-		logic in here for tokens
-		Tested. Does not work.
-	}
-}
+	
+	5. 	 Make it more modular, add classes.
+			a. Lexer / Parser?
+			b. Validator
 */
+
 void print_token(Token const& curToken) {
 	//TODO operator overload for << so we can print easier.
 	//Could we add a .toString() and it automatically does the converstion,
