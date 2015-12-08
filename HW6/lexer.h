@@ -7,4 +7,6 @@
 
 std::vector<Token> parse_char(std::istream& c);
 
+bool isop(char c);
+
 #endif
