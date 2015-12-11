@@ -1,6 +1,6 @@
 #include <string> 
 class Add : public ArithmeticExpression{
-	string evaluate() }
+	string evaluate() {}
 
 	void print(){} //left `+` right
 	float convert (string s) { 

@@ -1,5 +1,7 @@
+#include <string>
+
 class Expression{
-	virtual string evaluate();
+	virtual std::string evaluate();
 	virtual void print(); 
 };
 

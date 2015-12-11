@@ -5,14 +5,15 @@
 
 //We must use strings
 
-class Expression {
-	void print(std::ostream& out);
-	~Expression() = default;
+class Expression{
+	virtual std::string evaluate();
+	virtual void print(); 
 };
 
-inline std::ostream& operator<<(std::ostream$ os, Expression const& expr){
-	expr.print(os);
-	return os;
-}
+
+// inline std::ostream& operator<<(std::ostream$ os, Expression const& expr){
+// 	expr.print(os);
+// 	return os;
+// }
 
 #endif

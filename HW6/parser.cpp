@@ -32,7 +32,7 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 
 		if (cur_token.type == num_token) { //if the token is an operand:
 			postfix.push_back(cur_token);
-			std::cout << "PRINTING num_token : " << cur_token.value << std::endl;
+			//std::cout << "PRINTING num_token : " << cur_token.value << std::endl;
 
 		} else { //token is an operator.
 
@@ -45,7 +45,7 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 			        || (operators.top().type == open_token)) {
 
 				operators.push(cur_token);
-				std::cout << "pushed on stack: " << cur_token.value << std::endl;
+				//std::cout << "pushed on stack: " << cur_token.value << std::endl;
 
 			} else { //remove ops which have a higher
 
@@ -69,7 +69,7 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 						operators.pop();
 
 					} else {
-						std::cout << "PRINTING 1st while: " << operators.top().value << std::endl;
+						//std::cout << "PRINTING 1st while: " << operators.top().value << std::endl;
 						postfix.push_back(operators.top());
 						operators.pop();
 					}
@@ -84,7 +84,7 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 
 		} else {
 			postfix.push_back(operators.top());
-			std::cout << "PRINTING 2nd while: " << operators.top().type << std::endl;
+			//std::cout << "PRINTING 2nd while: " << operators.top().type << std::endl;
 			operators.pop();
 		}
 	}
