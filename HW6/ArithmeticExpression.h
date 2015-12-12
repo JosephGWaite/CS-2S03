@@ -3,7 +3,7 @@
 
 #include "Expression.h"
 
-class ArithmeticExpression {
+class ArithmeticExpression{
 public:
 	ArithmeticExpression *left;
 	ArithmeticExpression *right;
