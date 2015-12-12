@@ -1,7 +1,7 @@
-
+#include "token.h"
 #include <iostream>
 #include <vector>
-#include "token.h"
+
 using namespace std;
 
 double recurCalc(std::vector<Token> &vec, int n)
@@ -34,7 +34,7 @@ double recurCalc(std::vector<Token> &vec, int n)
 	if (vec[n].type == num_token)
 	{
 		int temp = vec[n];
-		vec[n] = ')';
+		vec[n] = {open_token, ')'}
 		return (double)temp;
 	}
 	else if(vec[n].type == close_token)

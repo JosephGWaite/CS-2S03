@@ -1,7 +1,6 @@
 #ifndef EXPRESSION_H
 #define EXPRESSION_H
 
-#include <ostream>
 
 //We must use strings
 

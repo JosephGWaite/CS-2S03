@@ -1,6 +1,7 @@
-#include <cstring> 
+#include <string> 
+
 class Divide : public ArithmeticExpression{
-	
+
 	string evaluate() {
 		return this->evaluate(this->right) / evaluate(this->right)
 	}

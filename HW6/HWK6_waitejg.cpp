@@ -11,20 +11,10 @@
 
 //BIG LIST OF TODOS:
 /*
-	1. 	 We need a validator.
-			a. loop through the infix notation tokens
-			b. compare them against a set of rules
-				i) equal # of open and closing parens
-				ii) cannot have weird signage like /* ++
-				iii) just come up with a set of rules for these
-			c. if validate fails, throw an error
-			d. check piazza for info.
 
-	2.	 Convert to postfix notation.
+	2.	 Postfix Notation calculator has bugs
 
-	3.	 from postfix -> make the expression tree.
-
-	4. 	 Make the trees with recursion.
+	4. 	 Traverse the tree with infix and print
 
 	5. 	 Make it more modular, add classes.
 			a. Lexer / Parser?
@@ -33,13 +23,15 @@
 	6.	 Fix the inevitable shittonne of memory leaks
 
 	7.	 -ve numbers are a token. change the dfa
+			//Fairly high priority
+			//Will not eval or print infix without this
+			
+
+	8.	Evalute different types.
 */
 
+
 void print_token(Token const& curToken) {
-	//TODO operator overload for << so we can print easier.
-	//Could we add a .toString() and it automatically does the converstion,
-	// like java?
-	// I'll Get someone else to do it. JOEL joel do this
 	std::cout << "{ Type: " << curToken.type
 	          << " Value: " << curToken.value
 	          << " }" << std::endl;
@@ -48,22 +40,47 @@ void print_token(Token const& curToken) {
 
 
 ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
+
 	Token curToken = postfix_list.back();
 	postfix_list.pop_back();
-	ArithmeticExpression *node = new ArithmeticExpression;
 
+	ArithmeticExpression *node = new ArithmeticExpression;
 	//if this node is an operaand. no left or right subtrees. base case for recursion.
 	if (curToken.type == num_token) {
+
+
+
 		node -> value = curToken.value;
 		node -> type = curToken.type;
 		std::cout << "leaf " << curToken.value << std::endl;
+
 		node -> right = nullptr;
 		node -> left = nullptr;
+
 	} else {
+
+		// switch (curToken.type) {
+		// case mult_token:
+		// 	ArithmeticExpression *node = new ArithmeticExpression;
+		// 	break;
+		// case div_token:
+		// 	ArithmeticExpression *node = new ArithmeticExpression;
+		// 	break;
+		// case add_token:
+		// 	ArithmeticExpression *node = new ArithmeticExpression;
+		// 	break;
+		// case sub_token:
+		// 	ArithmeticExpression *node = new ArithmeticExpression;
+		// 	break;
+		// }
+
 		node -> value = curToken.value;
 		node -> type = curToken.type;
+
+
 		std::cout << "right " << curToken.value << std::endl;
 		node -> right = toTree(postfix_list);
+
 		std::cout << "left " << curToken.value << std::endl;
 		node -> left = toTree(postfix_list);
 	}
@@ -90,13 +107,16 @@ int main () {
 
 		//Comments :P
 		prefix_list = parse_char(cur_line);
+
 		//validator(prefix_list);
 
 		postfix_list = toPostfix(prefix_list);
 
-		ArithmeticExpression *tree = toTree(postfix_list);
+		ArithmeticExpression *tree = new ArithmeticExpression;
 
-		//tree->print();
+		tree = toTree(postfix_list);
+
+		tree->print();
 
 		std::for_each(postfix_list.begin(), postfix_list.end(), &print_token);
 	}
