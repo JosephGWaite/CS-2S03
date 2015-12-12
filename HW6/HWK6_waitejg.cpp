@@ -14,6 +14,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <iomanip> // for setprecision 
 
 //BIG LIST OF TODOS:
 /*
@@ -93,18 +94,27 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 
 void deleteTree (ArithmeticExpression *node) {
 
-	if ((node->left) != nullptr || (node->right) != nullptr ) {
+	if ((node->left) != nullptr || (node->right) != nullptr) {
 		deleteTree(node->left);
 		deleteTree(node->right);
 	}
 	delete node;
 }
 
-std::vector<Token> incrementBonus(std::vector<Token> token_list){
-	for (Token &cur_token : token_list){
+std::vector<Token> incrementBonus(std::vector<Token> token_list) {
+	for (Token &cur_token : token_list) {
 		if (cur_token.type == num_token) {
-			cur_token.value = std::to_string(std::stof(cur_token.value) + 1);
-		} //else 
+			float temp; 
+			temp = std::stof(cur_token.value) + 1; 
+
+			std::string zs; 
+			std::ostringstream ss;
+
+			ss << std::fixed << std::setprecision(2) << temp;
+			zs = ss.str();
+
+			cur_token.value = zs;
+		}
 	}
 	return token_list;
 }
@@ -129,7 +139,7 @@ int main () {
 		std::vector<Token> prefix_list;
 		std::vector<Token> postfix_list;
 
-	
+
 
 		if (line == "@") {
 
@@ -137,7 +147,7 @@ int main () {
 				std::cout << "You haven't entered an equation yet" << std::endl;
 				continue;
 			}
-			//we assume it's a valid and already in postfix. 
+			//we assume it's a valid and already in postfix.
 			postfix_list = incrementBonus(previous_expr);
 
 		} else {
@@ -155,7 +165,7 @@ int main () {
 			//convert the tokens to postfix notation, bc its easier to make a tree this way.
 			postfix_list = toPostfix(prefix_list);
 
-			
+
 
 		}
 
