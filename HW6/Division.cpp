@@ -1,12 +1,11 @@
-#include <cstring> 
-class Divide : public ArithmeticExpression{
-	
-	string evaluate() {
-		return this->evaluate(this->right) / evaluate(this->right)
-	}
+#include "Division.h"
 
-	void print(){} //left `/` right
-	float convert (string s) { 
-		//Converts String (returned by eval to float) 
-	}
-};
+Division::evaluate()
+{
+	return this->evaluate(this->left) / this->evaluate(this->right)
+}
+
+Division::print()
+{
+	//this has a purpose... i know it does...
+}

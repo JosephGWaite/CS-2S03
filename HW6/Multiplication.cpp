@@ -1,8 +1,13 @@
-class Multiply: public ArithmeticExpression { 
+#include "Multiplication.h"
 
-	string evaluate(&left_node, &right_node){ 
-		return evaluate(left_node) * evaluate(right_node)
-	} 
-	void print(){ } // left `*` right
-};
+Multiplication::evaluate()
+{
+	return this->evaluate(this->left) * this->evaluate(this->this);
+}
+
+Multiplication::print()
+{
+	//lol idk
+}
+
 
