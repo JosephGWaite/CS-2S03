@@ -1,24 +1,9 @@
 #include "token.h"
 #include <vector>
 #include <iostream>
-void errorMessage(int type)
+void errorMessage()
 {
-	if (type == 1)
-	{
-		std::cout << "ERROR: Invalid first character." << std::endl;
-	}
-	if (type == 2)
-	{
-		std::cout << "ERROR: Invalid operator usage" << std::endl;
-	}
-	if (type == 3)
-	{
-		std::cout << "ERROR: Two adjacent numbers" << std::endl;
-	}
-	if (type == 4)
-	{
-		std::cout << "ERROR: Unbalanced parentheses" << std::endl;
-	}
+	cout << "Expression is not well formed."
 }
 
 void validator(std::vector<Token> input)
@@ -31,7 +16,7 @@ void validator(std::vector<Token> input)
 	//First character can only be a number or an open parentheses
 
 	if (input[0].type != num_token && input[0].type != open_token) {
-		errorMessage(1);
+		errorMessage();
 	}
 
 	for (int i = 0; i < input.size(); i++) {
@@ -42,10 +27,10 @@ void validator(std::vector<Token> input)
 
 		if (input[i].type == add_token || input[i].type == mult_token || input[i].type == div_token) {
 			if (input[i - 1].type != num_token && input[i - 1].type != close_token) {
-				errorMessage(2);
+				errorMessage();
 			}
 			if (input[i + 1].type != num_token && input[i + 1].type != open_token) {
-				errorMessage(2);
+				errorMessage();
 			}
 		}
 
@@ -56,11 +41,11 @@ void validator(std::vector<Token> input)
 
 		if (input[i].type == sub_token) {
 			if (input[i - 1].type != num_token && input[i - 1].type != close_token && input[i - 1].type != open_token) {
-				errorMessage(2);
+				errorMessage();
 			}
 			if (input[i - 1].type == open_token) {
 				if ((input[i + 1].type != num_token || input[i + 2].type != close_token) && input[i + 1].type != open_token) {
-					errorMessage(2);
+					errorMessage();
 				}
 			}
 		}
@@ -71,13 +56,13 @@ void validator(std::vector<Token> input)
 		if (input[i].type == num_token) {
 			if (i == 0) {
 				if (input[i + 1].type == num_token) {
-					errorMessage(3);
+					errorMessage();
 				}
 			}
 			else
 			{
 				if (input[i - 1].type == num_token || input[i + 1].type == num_token) {
-					errorMessage(3);
+					errorMessage();
 				}
 			}
 		}
@@ -95,6 +80,6 @@ void validator(std::vector<Token> input)
 	//Compare amounts of parentheses
 
 	if (open_counter != close_counter) {
-		errorMessage(4);
+		errorMessage();
 	}
 }
