@@ -37,6 +37,11 @@ void print_token(Token const& curToken) {
 	          << " }" << std::endl;
 }
 
+void print_expr(Token const& curToken) {
+	std::cout << " " << curToken.value ;
+}
+
+
 
 
 ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
@@ -112,12 +117,12 @@ int main () {
 
 		postfix_list = toPostfix(prefix_list);
 
-		ArithmeticExpression *tree = new ArithmeticExpression;
+		// ArithmeticExpression *tree = new ArithmeticExpression;
 
-		//tree = toTree(postfix_list);
+		// tree = toTree(postfix_list);
 
-		//tree->print();
+		// tree->print();
 
-		std::for_each(postfix_list.begin(), postfix_list.end(), &print_token);
+		std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr);
 	}
 }
