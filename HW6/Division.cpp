@@ -1,8 +1,17 @@
 #include "Division.h"
+#include <string>
 
-Division::evaluate()
+std::string Division::evaluate()
 {
-	return this->evaluate(this->left) / this->evaluate(this->right)
+	float x, y, z;
+	if (this->right == nullptr || this->left == nullptr) {
+		return std::stof(this->value);
+	} else {
+		x = (this->left)->evaluate();
+		y = (this->right)->evaluate();
+		z = y / x;
+		return std::to_string(z);
+	}
 }
 
 Division::print()

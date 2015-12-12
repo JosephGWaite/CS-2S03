@@ -1,11 +1,20 @@
 #include "Multiplication.h"
+#include <string>
 
-Multiplication::evaluate()
+std::string Multiplication::evaluate()
 {
-	return this->evaluate(this->left) * this->evaluate(this->this);
+	float x, y, z;
+	if (this->right == nullptr || this->left == nullptr) {
+		return std::stof(this->value);
+	} else {
+		x = (this->left)->evaluate();
+		y = (this->right)->evaluate();
+		z = y * x;
+		return std::to_string(z);
+	}
 }
 
-Multiplication::print()
+voif Multiplication::print()
 {
 	//lol idk
 }

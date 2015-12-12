@@ -3,33 +3,37 @@
 #include "ArithmeticExpression.h"
 #include "token.h"
 
-std::string ArithmeticExpression::evaluate() {
-	//std::string x;
-	//x.push_back(this->value);
-	// x.push_back("  ");
-	// x.push_back(evaluate(this->right));
-	// x.push_back(evaluate(this->left));
-	// return x;
-	//return x;
-	std::string x = "yeezy";
-	return x;
+float ArithmeticExpression::evaluate() {
+	float x, y, z;
+	if (this->right == nullptr || this->left == nullptr) {
+		return std::stof(this->value);
+	} else {
+		//std::cout << "If this is called, oops" << std::endl;
+		x = (this->left)->evaluate();
+		y = (this->right)->evaluate();
+
+		if (this->type == mult_token) {
+			z= y * x;
+
+		} else if (this->type == div_token) {
+			z =  y / x;
+
+		} else if (this->type == add_token) {
+			z = y + x;
+
+		} else if (this->type == sub_token) {
+			z=  y - x;
+		}
+
+		return z;
+	}
 }
 
-// void ArithmeticExpression::print() {
-// 	std::cout << "called print on : " << (this-> value) << std::endl;
-
-// 	if (this->right != nullptr)
-// 		(this->right)->print();
-
-// 	if (this->left != nullptr)
-// 		(this->left)->print();
-// }
-
-void ArithmeticExpression::print(){
+void ArithmeticExpression::print() {
 
 	if (this->left != nullptr) {
 		if ((this->value) == "+" || (this->value) == "-" || (this->value) == "*" || (this->value) == "/") {
-			
+
 			std::cout << "(";
 			(this->right)->print();
 			std::cout << " ";

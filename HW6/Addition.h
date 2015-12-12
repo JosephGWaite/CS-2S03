@@ -3,7 +3,7 @@
 
 #include <string>
 #include "ArithmeticExpression.h"
-class addition : public ArithmeticExpression {
+class Addition : public ArithmeticExpression {
 	std::string evaluate();
 	void print();
 };

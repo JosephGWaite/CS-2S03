@@ -2,7 +2,13 @@
 #include "parser.h"
 #include "token.h"
 #include "validator.cpp"
+
 #include "ArithmeticExpression.h"
+#include "Multiplication.h"
+#include "Addition.h"
+#include "Division.h"
+#include "Subtraction.h"
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -44,53 +50,57 @@ void print_expr(Token const& curToken) {
 
 
 
+
 ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 
 	Token curToken = postfix_list.back();
 	postfix_list.pop_back();
 
-	ArithmeticExpression *node = new ArithmeticExpression;
+	ArithmeticExpression *node = NULL;
+
 	//if this node is an operaand. no left or right subtrees. base case for recursion.
 	if (curToken.type == num_token) {
-
-
+		node = new ArithmeticExpression; 
 
 		node -> value = curToken.value;
 		node -> type = curToken.type;
-		std::cout << "leaf " << curToken.value << std::endl;
+		//std::cout << "leaf " << curToken.value << std::endl;
 
 		node -> right = nullptr;
 		node -> left = nullptr;
 
 	} else {
 
-		// switch (curToken.type) {
-		// case mult_token:
-		// 	ArithmeticExpression *node = new ArithmeticExpression;
-		// 	break;
-		// case div_token:
-		// 	ArithmeticExpression *node = new ArithmeticExpression;
-		// 	break;
-		// case add_token:
-		// 	ArithmeticExpression *node = new ArithmeticExpression;
-		// 	break;
-		// case sub_token:
-		// 	ArithmeticExpression *node = new ArithmeticExpression;
-		// 	break;
-		// }
+		if (curToken.type == mult_token) { 
+			node = new Multiplication;
+
+		} else if (curToken.type == div_token) {
+			node = new Division;
+
+		} else if (curToken.type == add_token) {
+			node = new Addition;
+
+		} else if (curToken.type == sub_token) {
+			node = new Subtraction;
+
+		} else {
+			// should not be called. but w/e 
+			node = new ArithmeticExpression;
+		}
+
 
 		node -> value = curToken.value;
 		node -> type = curToken.type;
 
-		
-		std::cout << "left " << curToken.value << std::endl;
+
+		//std::cout << "left " << curToken.value << std::endl;
 		node -> left = toTree(postfix_list);
 
-		std::cout << "right " << curToken.value << std::endl;
+		//std::cout << "right " << curToken.value << std::endl;
 		node -> right = toTree(postfix_list);
 
 	}
-	return node;
+	return node; 
 }
 
 
@@ -100,11 +110,12 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 int main () {
 	std::string line;
 	//TODO: error handling
-	std::cout << "Please enter an expression: "; 
-	while (std::getline(std::cin, line)) {
+	std::cout << "Please enter an expression: ";
+	while (std::getline(std::cin >> std::ws, line)) {
 		// User entering '#' is the defined exit condition.
 
 		if (line == "#") break;
+		if (line == "") continue; //Tabs or spaces are stripped, in the while statement
 
 		//We're gonna pass this stream to
 		std::istringstream cur_line(line);
@@ -126,7 +137,9 @@ int main () {
 
 		tree->print();
 
+		std::cout << " = " << tree->evaluate();
+
 		std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr);
-		std::cout << "\nPlease enter an expression: "; 
+		std::cout << "\nPlease enter an expression: ";
 	}
 }

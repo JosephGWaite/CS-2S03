@@ -3,7 +3,7 @@
 #include <iostream>
 void errorMessage()
 {
-	cout << "Expression is not well formed."
+	std::cout << "Expression is not well formed.";
 }
 
 void validator(std::vector<Token> input)

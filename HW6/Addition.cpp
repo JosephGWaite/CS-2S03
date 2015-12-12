@@ -1,13 +1,23 @@
 #include "Addition.h"
+#include "string"
 
-Addition::evaluate() 
+std::string Addition::evaluate()
 {
-	return this->evaluate(left_node) + this->evaluate(right_node)
+	std::cout << "ADDITON EVAL CALL\n";
+	float x, y, z;
+	if (this->right == nullptr || this->left == nullptr) {
+		return std::stof(this->value);
+	} else {
+		x = (this->left)->evaluate();
+		y = (this->right)->evaluate();
+		z = y + x;
+		return std::to_string(z);
+	}
 }
 
-Addition::print()
+void Addition::print()
 {
 	//things
-} 
+}
 
 
