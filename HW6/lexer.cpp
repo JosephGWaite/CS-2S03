@@ -35,7 +35,7 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 		if (c == ' ') { //Ignore whitespace.
 			our_stream.get();
 
-		} else if (c == '(' && next == '-' ) { //negative numbers
+		} else if (c == '(' && next == '-' ) { //negative numbers (-70) - (-1)
 			listOfTokens.push_back(lex_negnum(our_stream));
 
 		} else if (c == '(') {
@@ -57,6 +57,7 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 	return listOfTokens;
 }
 
+//Returns a negative number token.
 Token lex_negnum(std::istream& our_stream) {
 	char c;
 	our_stream.get(); //should be a paren. discard it. 
@@ -73,6 +74,7 @@ Token lex_negnum(std::istream& our_stream) {
 	return {num_token, number};
 }
 
+//Returns a number token
 Token lex_num(std::istream& our_stream) {
 	char c;
 	our_stream.get(c);
@@ -86,20 +88,18 @@ Token lex_num(std::istream& our_stream) {
 	return {num_token, number};
 }
 
+//returns an operator token + - * /
 Token lex_op(std::istream& our_stream) {
 
-	//This pos here is how stack says to do string coversion.
-	//I assume that beacuse i have to do string conversion,
-	// then I should restructure.
-	//
 	char c;
 	our_stream.get(c);
 
+	//Stack says this is how to do (char -> string) conversion. 
 	std::stringstream ss;
 	std::string target;
-
 	ss << c;
 	ss >> target;
+
 	switch (c) {
 	case '+':
 		return {add_token, target};
@@ -116,6 +116,7 @@ Token lex_op(std::istream& our_stream) {
 	}
 }
 
+// returns paren tokens 
 Token lex_paren(std::istream& our_stream) {
 	char c;
 	our_stream.get(c);

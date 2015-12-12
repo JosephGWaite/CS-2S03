@@ -43,14 +43,14 @@ void print_expr(Token const& curToken) {
 
 ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 
-	Token curToken = postfix_list.back(); //start from the back, yay RPN 
+	Token curToken = postfix_list.back(); //start from the back, yay RPN
 	postfix_list.pop_back();
 
 	ArithmeticExpression *node = NULL; //create a pointer to a tree
 
 	//if this node is an operaand. no left or right subtrees. base case for recursion.
 	if (curToken.type == num_token) {
-		node = new ArithmeticExpression; 
+		node = new ArithmeticExpression;
 
 		node -> value = curToken.value;
 		node -> type = curToken.type;
@@ -58,9 +58,9 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 		node -> right = nullptr;
 		node -> left = nullptr;
 
-	} else { //create a subtree 
+	} else { //create a subtree
 
-		if (curToken.type == mult_token) { 
+		if (curToken.type == mult_token) {
 			node = new Multiplication;
 
 		} else if (curToken.type == div_token) {
@@ -73,7 +73,7 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 			node = new Subtraction;
 
 		} else {
-			// should not be called. but w/e 
+			// should not be called. but w/e
 			node = new ArithmeticExpression;
 		}
 
@@ -82,16 +82,23 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 		node -> type = curToken.type;
 
 
-		//recursise call, working our way through the token list, 
+		//recursise call, working our way through the token list,
 		// the order (left | right ) must match the print and eval functions
 		node -> left = toTree(postfix_list);
 		node -> right = toTree(postfix_list);
 
 	}
-	return node; 
+	return node;
 }
 
+void deleteTree (ArithmeticExpression *node) {
 
+	if ((node->left) != nullptr || (node->right) != nullptr ) {
+		deleteTree(node->left);
+		deleteTree(node->right);
+	}
+	delete node;	
+}
 //Grabbed this input stuff from here:
 //		http://www.cppsamples.com/common-tasks/read-line-by-line.html
 
@@ -112,32 +119,35 @@ int main () {
 		std::vector<Token> postfix_list;
 		std::vector<Token> previous_expr;
 
-		//Gets a list of tokens in infix notation, which is hard to parse. 
+		//Gets a list of tokens in infix notation, which is hard to parse.
 		prefix_list = parse_char(cur_line);
 
-		//We run a validator on the infix tokens, and make sure the input was valid. 
-		// if not, ask again. 
-		if (validator(prefix_list) == false){
+		//We run a validator on the infix tokens, and make sure the input was valid.
+		// if not, ask again.
+		if (validator(prefix_list) == false) {
 			std::cout << "\n\nPlease enter a valid expression: ";
 			continue;
 		}
 
-		//convert the tokens to postfix notation, bc its easier to make a tree this way. 
+		//convert the tokens to postfix notation, bc its easier to make a tree this way.
 		postfix_list = toPostfix(prefix_list);
 
-		//starting point of the tree (root?) 
+		//starting point of the tree (root?)
 		ArithmeticExpression *tree = new ArithmeticExpression;
 
-		//toTree takes a list of tokens, and returns a pointer to the root of a tree it created 
+		//toTree takes a list of tokens, and returns a pointer to the root of a tree it created
 		tree = toTree(postfix_list);
 
-		//call the recursive print function, which traveserse the tree in infix notation. 
+		//call the recursive print function, which traveserse the tree in infix notation.
 		tree->print();
 
-		//call the recursive evaluate fucntion. It evaluates recursivly. 
+		//call the recursive evaluate fucntion. It evaluates recursivly.
 		std::cout << " = " << tree->evaluate();
 
-		//std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr); // <- For testing. 
+		//free up the memory. 
+		deleteTree(tree); // will delete everything.
+
+		//std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr); // <- For testing.
 		std::cout << "\n\nPlease enter an expression: ";
 	}
 }

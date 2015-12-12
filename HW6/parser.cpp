@@ -55,7 +55,7 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 				//If closing paren, we need to find the opener
 
 
-
+				//
 				while (!operators.empty()
 				        && ((precedence(operators.top()) >= precedence(cur_token))
 				            || orphans)
@@ -68,7 +68,6 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 						orphans--;
 
 					} else {
-						//std::cout << "PRINTING 1st while: " << operators.top().value << std::endl;
 						postfix.push_back(operators.top());
 						
 					}
