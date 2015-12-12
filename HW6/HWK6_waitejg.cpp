@@ -82,12 +82,13 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 		node -> value = curToken.value;
 		node -> type = curToken.type;
 
+		
+		std::cout << "left " << curToken.value << std::endl;
+		node -> left = toTree(postfix_list);
 
 		std::cout << "right " << curToken.value << std::endl;
 		node -> right = toTree(postfix_list);
 
-		std::cout << "left " << curToken.value << std::endl;
-		node -> left = toTree(postfix_list);
 	}
 	return node;
 }
@@ -99,8 +100,10 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 int main () {
 	std::string line;
 	//TODO: error handling
+	std::cout << "Please enter an expression: "; 
 	while (std::getline(std::cin, line)) {
 		// User entering '#' is the defined exit condition.
+
 		if (line == "#") break;
 
 		//We're gonna pass this stream to
@@ -117,12 +120,13 @@ int main () {
 
 		postfix_list = toPostfix(prefix_list);
 
-		// ArithmeticExpression *tree = new ArithmeticExpression;
+		ArithmeticExpression *tree = new ArithmeticExpression;
 
-		// tree = toTree(postfix_list);
+		tree = toTree(postfix_list);
 
-		// tree->print();
+		tree->print();
 
 		std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr);
+		std::cout << "\nPlease enter an expression: "; 
 	}
 }
