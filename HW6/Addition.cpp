@@ -1,11 +1,13 @@
-#include <string> 
-class Add : public ArithmeticExpression{
-	string evaluate() {}
+#include "Addition.h"
 
-	void print(){} //left `+` right
-	float convert (string s) { 
-		//Converts String (returned by eval to float) 
-	}
+Addition::evaluate() 
+{
+	return this->evaluate(left_node) + this->evaluate(right_node)
+}
 
-};
+Addition::print()
+{
+	//things
+} 
+
 

@@ -1,13 +1,11 @@
-class Subtract : public ArithmeticExpression { 
-	string evaluate();
-	void print(); // left `-` right
-};
+#include "Subtraction.h"
 
-
-Subtract::evaluate(){
-
+Subtraction::evaluate() 
+{ 
+	return this->evaluate(this->left) - this->evaluate(this->right);
 }
 
-Subtract::print(){ 
-
-}
+Subtraction::print()
+{
+	//does things
+} 
