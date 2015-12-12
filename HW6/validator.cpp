@@ -3,22 +3,7 @@
 #include <iostream>
 void errorMessage(int type)
 {
-	if (type == 1)
-	{
-		std::cout << "ERROR: Invalid first character." << std::endl;
-	}
-	if (type == 2)
-	{
-		std::cout << "ERROR: Invalid operator usage" << std::endl;
-	}
-	if (type == 3)
-	{
-		std::cout << "ERROR: Two adjacent numbers" << std::endl;
-	}
-	if (type == 4)
-	{
-		std::cout << "ERROR: Unbalanced parentheses" << std::endl;
-	}
+	cout << "Expression is not well formed."
 }
 
 void validator(std::vector<Token> input)
