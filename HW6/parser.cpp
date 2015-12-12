@@ -9,16 +9,19 @@
 // then we can easily do postfix to trees using our class structure thing
 
 int precedence(Token a) {
-	if (a.type == open_token || a.type == close_token) {
+
+	if (a.type == add_token || a.type == sub_token) {
 		return 1;
-	} else if (a.type == add_token || a.type == sub_token) {
-		return 2;
 	} else if (a.type == mult_token || a.type == div_token) {
+		return 2;
+	} else if (a.type == open_token) { // (
+		return 5;
+	} else if (a.type == close_token) { // )
 		return 4;
 	} else {
-		//TODO: throw error and DO NOT return 0.
 		return 0;
 	}
+
 }
 
 
@@ -34,15 +37,13 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 			postfix.push_back(cur_token);
 			//std::cout << "PRINTING num_token : " << cur_token.value << std::endl;
 
-		} else { //token is an operator.
+		} else { //token must be an operator.
 
 			//add to stack if:
 			//   stack is empty
 			// | if token has higher precendece than op on top of stack
 			// | if top is open_token token.
-			if ((operators.empty())
-			        || (precedence(cur_token) > precedence(operators.top()))
-			        || (operators.top().type == open_token)) {
+			if (operators.empty() || precedence(cur_token) > precedence(operators.top()) || (operators.top().type == open_token)) {
 
 				operators.push(cur_token);
 				//std::cout << "pushed on stack: " << cur_token.value << std::endl;
@@ -55,40 +56,34 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 
 
 
-				while (!operators.empty() 
-							&& ((precedence(operators.top()) >= precedence(cur_token)) 
-								|| orphans == 0)
-				        	&& !(orphans != 0 && operators.top().type == open_token)) {
+				while (!operators.empty()
+				        && ((precedence(operators.top()) >= precedence(cur_token))
+				            || orphans)
+				        && !(!orphans && operators.top().type == open_token) ) {
 
 					if (operators.top().type == close_token) {
 						orphans++;
-						operators.pop();
 
 					} else if (operators.top().type == open_token) {
 						orphans--;
-						operators.pop();
 
 					} else {
 						//std::cout << "PRINTING 1st while: " << operators.top().value << std::endl;
 						postfix.push_back(operators.top());
-						operators.pop();
+						
 					}
+					operators.pop();
 				}
 				operators.push(cur_token);
 			}
 		}
 	}
 	while (!operators.empty()) {
-		if ((operators.top().type == open_token) || (operators.top().type == close_token)) {
-			operators.pop();
-
-		} else {
+		if ((operators.top().type != open_token) && (operators.top().type != close_token)) {
 			postfix.push_back(operators.top());
-			//std::cout << "PRINTING 2nd while: " << operators.top().type << std::endl;
+		} 
 			operators.pop();
-		}
 	}
-
 	return postfix;
 }
 

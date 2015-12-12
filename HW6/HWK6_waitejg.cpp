@@ -25,7 +25,7 @@
 	7.	 -ve numbers are a token. change the dfa
 			//Fairly high priority
 			//Will not eval or print infix without this
-			
+
 
 	8.	Evalute different types.
 */
@@ -114,9 +114,9 @@ int main () {
 
 		ArithmeticExpression *tree = new ArithmeticExpression;
 
-		tree = toTree(postfix_list);
+		//tree = toTree(postfix_list);
 
-		tree->print();
+		//tree->print();
 
 		std::for_each(postfix_list.begin(), postfix_list.end(), &print_token);
 	}
