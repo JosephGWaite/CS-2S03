@@ -97,13 +97,24 @@ void deleteTree (ArithmeticExpression *node) {
 		deleteTree(node->left);
 		deleteTree(node->right);
 	}
-	delete node;	
+	delete node;
 }
+
+std::vector<Token> incrementBonus(std::vector<Token> token_list){
+	for (Token &cur_token : token_list){
+		if (cur_token.type == num_token) {
+			cur_token.value = std::to_string(std::stof(cur_token.value) + 1);
+		} //else 
+	}
+	return token_list;
+}
+
 //Grabbed this input stuff from here:
 //		http://www.cppsamples.com/common-tasks/read-line-by-line.html
 
 int main () {
 	std::string line;
+	std::vector<Token> previous_expr; // for bonus
 	//TODO: error handling
 	std::cout << "Please enter an expression: ";
 	while (std::getline(std::cin >> std::ws, line)) {
@@ -117,20 +128,38 @@ int main () {
 
 		std::vector<Token> prefix_list;
 		std::vector<Token> postfix_list;
-		std::vector<Token> previous_expr;
 
-		//Gets a list of tokens in infix notation, which is hard to parse.
-		prefix_list = parse_char(cur_line);
+	
 
-		//We run a validator on the infix tokens, and make sure the input was valid.
-		// if not, ask again.
-		if (validator(prefix_list) == false) {
-			std::cout << "\n\nPlease enter a valid expression: ";
-			continue;
+		if (line == "@") {
+
+			if (previous_expr.empty()) {
+				std::cout << "You haven't entered an equation yet" << std::endl;
+				continue;
+			}
+			//we assume it's a valid and already in postfix. 
+			postfix_list = incrementBonus(previous_expr);
+
+		} else {
+
+			//Gets a list of tokens in infix notation, which is hard to parse.
+			prefix_list = parse_char(cur_line);
+
+			//We run a validator on the infix tokens, and make sure the input was valid.
+			// if not, ask again.
+			if (validator(prefix_list) == false) {
+				std::cout << "\n\nPlease enter a valid expression: ";
+				continue;
+			}
+
+			//convert the tokens to postfix notation, bc its easier to make a tree this way.
+			postfix_list = toPostfix(prefix_list);
+
+			
+
 		}
 
-		//convert the tokens to postfix notation, bc its easier to make a tree this way.
-		postfix_list = toPostfix(prefix_list);
+		previous_expr = postfix_list;
 
 		//starting point of the tree (root?)
 		ArithmeticExpression *tree = new ArithmeticExpression;
@@ -144,7 +173,7 @@ int main () {
 		//call the recursive evaluate fucntion. It evaluates recursivly.
 		std::cout << " = " << tree->evaluate();
 
-		//free up the memory. 
+		//free up the memory.
 		deleteTree(tree); // will delete everything.
 
 		//std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr); // <- For testing.
