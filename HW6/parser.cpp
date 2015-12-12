@@ -78,6 +78,9 @@ std::vector<Token> toPostfix(std::vector<Token> token_list) {
 			}
 		}
 	}
+
+	//output any ops left on the stack. 
+	//ignoring parens of course
 	while (!operators.empty()) {
 		if ((operators.top().type != open_token) && (operators.top().type != close_token)) {
 			postfix.push_back(operators.top());

@@ -18,22 +18,12 @@
 //BIG LIST OF TODOS:
 /*
 
-	2.	 Postfix Notation calculator has bugs
-
-	4. 	 Traverse the tree with infix and print
-
 	5. 	 Make it more modular, add classes.
 			a. Lexer / Parser?
 			b. Validator
 
 	6.	 Fix the inevitable shittonne of memory leaks
 
-	7.	 -ve numbers are a token. change the dfa
-			//Fairly high priority
-			//Will not eval or print infix without this
-
-
-	8.	Evalute different types.
 */
 
 
@@ -53,10 +43,10 @@ void print_expr(Token const& curToken) {
 
 ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 
-	Token curToken = postfix_list.back();
+	Token curToken = postfix_list.back(); //start from the back, yay RPN 
 	postfix_list.pop_back();
 
-	ArithmeticExpression *node = NULL;
+	ArithmeticExpression *node = NULL; //create a pointer to a tree
 
 	//if this node is an operaand. no left or right subtrees. base case for recursion.
 	if (curToken.type == num_token) {
@@ -64,12 +54,11 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 
 		node -> value = curToken.value;
 		node -> type = curToken.type;
-		//std::cout << "leaf " << curToken.value << std::endl;
 
 		node -> right = nullptr;
 		node -> left = nullptr;
 
-	} else {
+	} else { //create a subtree 
 
 		if (curToken.type == mult_token) { 
 			node = new Multiplication;
@@ -88,15 +77,14 @@ ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 			node = new ArithmeticExpression;
 		}
 
-
+		// subtree value and type are the same as the tokens
 		node -> value = curToken.value;
 		node -> type = curToken.type;
 
 
-		//std::cout << "left " << curToken.value << std::endl;
+		//recursise call, working our way through the token list, 
+		// the order (left | right ) must match the print and eval functions
 		node -> left = toTree(postfix_list);
-
-		//std::cout << "right " << curToken.value << std::endl;
 		node -> right = toTree(postfix_list);
 
 	}
@@ -115,31 +103,41 @@ int main () {
 		// User entering '#' is the defined exit condition.
 
 		if (line == "#") break;
-		if (line == "") continue; //Tabs or spaces are stripped, in the while statement
+		if (line == "") continue; //Stops a segfault with empty input
 
-		//We're gonna pass this stream to
+		//We're gonna pass this stream to the tokeniser / lexer / parser
 		std::istringstream cur_line(line);
 
 		std::vector<Token> prefix_list;
 		std::vector<Token> postfix_list;
 		std::vector<Token> previous_expr;
 
-		//Comments :P
+		//Gets a list of tokens in infix notation, which is hard to parse. 
 		prefix_list = parse_char(cur_line);
 
-		//validator(prefix_list);
+		//We run a validator on the infix tokens, and make sure the input was valid. 
+		// if not, ask again. 
+		if (validator(prefix_list) == false){
+			std::cout << "\n\nPlease enter a valid expression: ";
+			continue;
+		}
 
+		//convert the tokens to postfix notation, bc its easier to make a tree this way. 
 		postfix_list = toPostfix(prefix_list);
 
+		//starting point of the tree (root?) 
 		ArithmeticExpression *tree = new ArithmeticExpression;
 
+		//toTree takes a list of tokens, and returns a pointer to the root of a tree it created 
 		tree = toTree(postfix_list);
 
+		//call the recursive print function, which traveserse the tree in infix notation. 
 		tree->print();
 
+		//call the recursive evaluate fucntion. It evaluates recursivly. 
 		std::cout << " = " << tree->evaluate();
 
-		std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr);
-		std::cout << "\nPlease enter an expression: ";
+		//std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr); // <- For testing. 
+		std::cout << "\n\nPlease enter an expression: ";
 	}
 }

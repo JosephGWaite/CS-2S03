@@ -4,15 +4,12 @@
 #include <iostream>
 #include <vector>
 
-//This is sort of a parser at this point.
-//Should be broken into parser.{h,cpp}
+//Currently a bunch of global functions used.
 
-Token lex_op(std::istream&);  //{ = | - | * | / } //TODO add type
-Token lex_num(std::istream&); // {digits}
-Token lex_paren(std::istream&); // { ( | ) }
+//
 
 bool isop(char c) {
-	std::string const ops = "+-*/"; //I'd like to add more.
+	std::string const ops = "+-*/"; //I'd like to add more. //but IDGAF
 	if (ops.find(c) != std::string::npos)
 		return true;
 	else
@@ -26,23 +23,20 @@ bool isop(char c) {
 
 std::vector<Token> parse_char(std::istream& our_stream) {
 
-
-	//skip over whitespace!!
 	std::vector<Token> listOfTokens;
 
-	// while (our_stream.peek() == ' ')
-	// 	our_stream.ignore(1, ' ');
-
-
-	//if (!our_stream) return idk
-
 	char c;
-
+	char next;
 	while (our_stream.get(c)) { //as long as we can grab a char then do our loop.
+		next = our_stream.peek();
 		our_stream.unget(); //put the char we grabbed back.
+
 
 		if (c == ' ') { //Ignore whitespace.
 			our_stream.get();
+
+		} else if (c == '(' && next == '-' ) { //negative numbers
+			listOfTokens.push_back(lex_negnum(our_stream));
 
 		} else if (c == '(') {
 			listOfTokens.push_back(lex_paren(our_stream));
@@ -56,7 +50,6 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 		} else if (std::isdigit(c)) {
 			listOfTokens.push_back(lex_num(our_stream));
 		} else {
-			std::cout << "UNRECOGNISED CHAR";
 			break;
 		}
 	}
@@ -64,7 +57,21 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 	return listOfTokens;
 }
 
-//I'm going to do more here. l8ter tho bb
+Token lex_negnum(std::istream& our_stream) {
+	char c;
+	our_stream.get(); //should be a paren. discard it. 
+	our_stream.get(c); //should be a negative sign.
+
+	std::string number;
+	number.push_back(c); //push the negative sign onto the token. 
+	while (std::isdigit(our_stream.peek())) { //pushes all following digits on the token. 
+		char x;
+		our_stream.get(x);
+		number.push_back(x);
+	}
+	our_stream.get(); //should be closing paren. discard
+	return {num_token, number};
+}
 
 Token lex_num(std::istream& our_stream) {
 	char c;

@@ -1,12 +1,13 @@
 #include "token.h"
 #include <vector>
 #include <iostream>
-void errorMessage()
+bool errorMessage()
 {
 	std::cout << "Expression is not well formed.";
+	return false;
 }
 
-void validator(std::vector<Token> input)
+bool validator(std::vector<Token> input)
 {
 	//Set up counters for parentheses. Used to check equal numbers of each.
 
@@ -16,7 +17,7 @@ void validator(std::vector<Token> input)
 	//First character can only be a number or an open parentheses
 
 	if (input[0].type != num_token && input[0].type != open_token) {
-		errorMessage();
+		return errorMessage();
 	}
 
 	for (int i = 0; i < input.size(); i++) {
@@ -27,10 +28,10 @@ void validator(std::vector<Token> input)
 
 		if (input[i].type == add_token || input[i].type == mult_token || input[i].type == div_token) {
 			if (input[i - 1].type != num_token && input[i - 1].type != close_token) {
-				errorMessage();
+				return errorMessage();
 			}
 			if (input[i + 1].type != num_token && input[i + 1].type != open_token) {
-				errorMessage();
+				return errorMessage();
 			}
 		}
 
@@ -41,11 +42,11 @@ void validator(std::vector<Token> input)
 
 		if (input[i].type == sub_token) {
 			if (input[i - 1].type != num_token && input[i - 1].type != close_token && input[i - 1].type != open_token) {
-				errorMessage();
+				return errorMessage();
 			}
 			if (input[i - 1].type == open_token) {
 				if ((input[i + 1].type != num_token || input[i + 2].type != close_token) && input[i + 1].type != open_token) {
-					errorMessage();
+					return errorMessage();
 				}
 			}
 		}
@@ -56,13 +57,13 @@ void validator(std::vector<Token> input)
 		if (input[i].type == num_token) {
 			if (i == 0) {
 				if (input[i + 1].type == num_token) {
-					errorMessage();
+					return errorMessage();
 				}
 			}
 			else
 			{
 				if (input[i - 1].type == num_token || input[i + 1].type == num_token) {
-					errorMessage();
+					return errorMessage();
 				}
 			}
 		}
@@ -80,6 +81,8 @@ void validator(std::vector<Token> input)
 	//Compare amounts of parentheses
 
 	if (open_counter != close_counter) {
-		errorMessage();
+		return errorMessage();
 	}
+
+	return true; 
 }

@@ -3,15 +3,29 @@
 #include "ArithmeticExpression.h"
 #include "token.h"
 
-float ArithmeticExpression::evaluate() {
-	float x, y, z;
-	if (this->right == nullptr || this->left == nullptr) {
-		return std::stof(this->value);
-	} else {
-		//std::cout << "If this is called, oops" << std::endl;
-		x = (this->left)->evaluate();
-		y = (this->right)->evaluate();
+std::string ArithmeticExpression::evaluate() {
 
+	//All this awkward string to float conversion is due to the given specification. 
+	//
+	float x, y, z;
+
+	std::string xs, ys, zs; 
+
+	//recursion base case: a leaf, which means a number. 
+	if (this->right == nullptr || this->left == nullptr) {
+		return (this->value); //string
+
+	} else {
+
+		//Take the strings that evaluate must return. 
+		xs = (this->left)->evaluate();
+		ys = (this->right)->evaluate();
+
+		//turn them into floats so they're useful
+		x = std::stof(xs);
+		y = std::stof(ys); 
+
+		//do math
 		if (this->type == mult_token) {
 			z= y * x;
 
@@ -25,7 +39,8 @@ float ArithmeticExpression::evaluate() {
 			z=  y - x;
 		}
 
-		return z;
+		//return the result in a string because we were told to. 
+		return std::to_string(z);
 	}
 }
 
@@ -52,5 +67,6 @@ void ArithmeticExpression::print() {
 }
 
 float ArithmeticExpression::convert(std::string s) {
-	//Converts a string (returned by evaluate) to a float
+	return std::stof(s);
+	//		? 
 }

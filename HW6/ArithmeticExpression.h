@@ -12,7 +12,7 @@ public:
 	int type;
 	std::string value;
 
-	float evaluate();
+	std::string evaluate();
 
 	void print();
 
