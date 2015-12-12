@@ -1,7 +1,12 @@
+#ifndef MULTH
+#define MULTH 
+
 #include <string>
 #include "ArithmeticExpression.h"
 
 class Multiplication : public ArithmeticExpression {
-	string evaluate();
+	std::string evaluate();
 	void print();
 };
+
+#endif

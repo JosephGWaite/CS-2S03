@@ -1,7 +1,12 @@
+#ifndef SUBH
+#define SUBH
+
 #include <string>
 #include "ArithmeticExpression.h"
 
 class Subtraction : public ArithmeticExpression { 
-	string evaluate();
+	std::string evaluate();
 	void print();
 };
+
+#endif 
