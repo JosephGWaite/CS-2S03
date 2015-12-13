@@ -43,10 +43,6 @@ void print_expr(Token const& curToken) {
 	std::cout << " " << curToken.value ;
 }
 
-
-
-
-
 ArithmeticExpression* toTree(std::vector<Token> & postfix_list) {
 
 	Token curToken = postfix_list.back(); //start from the back, yay RPN
@@ -107,6 +103,8 @@ void deleteTree (ArithmeticExpression *node) {
 }
 
 std::vector<Token> incrementBonus(std::vector<Token> token_list) {
+	//This only works if its all postive numbers
+	// (-2) -> (0-2) -> increment -> (1 - 3)
 	for (Token &cur_token : token_list) {
 		if (cur_token.type == num_token) {
 			int temp;
