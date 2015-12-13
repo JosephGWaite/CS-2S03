@@ -28,6 +28,7 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 	char c;
 	char next;
 	while (our_stream.get(c)) { //as long as we can grab a char then do our loop.
+
 		next = our_stream.peek();
 		our_stream.unget(); //put the char we grabbed back.
 
@@ -53,10 +54,13 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 		} else if (std::isdigit(c)) {
 			listOfTokens.push_back(lex_num(our_stream));
 		} else {
-			break;
+			// invalid input, push some BAD TOKENS, and the validator will catch it and throw an error. 
+			// this is horrible. 
+			listOfTokens.push_back({add_token, "+"});
+			listOfTokens.push_back({add_token, "+"});
+			return listOfTokens;  
 		}
 	}
-
 	return listOfTokens;
 }
 
