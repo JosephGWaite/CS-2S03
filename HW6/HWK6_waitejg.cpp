@@ -1,3 +1,10 @@
+/*
+Name:  Joseph Waite, Joel Straatman
+MacID: waitejg, straatjc,
+Student Number:  001403712, 001314676,
+Description: scientific calculator with bonus
+*/
+
 #include "lexer.h"
 #include "parser.h"
 #include "token.h"
@@ -22,8 +29,6 @@
 	5. 	 Make it more modular, add classes.
 			a. Lexer / Parser?
 			b. Validator
-
-	6.	 Fix the inevitable shittonne of memory leaks
 
 */
 
