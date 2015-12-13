@@ -104,16 +104,16 @@ void deleteTree (ArithmeticExpression *node) {
 std::vector<Token> incrementBonus(std::vector<Token> token_list) {
 	for (Token &cur_token : token_list) {
 		if (cur_token.type == num_token) {
-			float temp; 
-			temp = std::stof(cur_token.value) + 1; 
+			int temp; 
+			temp = std::stoi(cur_token.value) + 1; 
 
-			std::string zs; 
-			std::ostringstream ss;
+			// std::string zs; 
+			// std::ostringstream ss;
 
-			ss << std::fixed << std::setprecision(2) << temp;
-			zs = ss.str();
+			// ss << std::fixed << std::setprecision() << temp;
+			// zs = ss.str();
 
-			cur_token.value = zs;
+			cur_token.value = std::to_string(temp);
 		}
 	}
 	return token_list;
