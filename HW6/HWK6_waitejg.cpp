@@ -109,10 +109,10 @@ void deleteTree (ArithmeticExpression *node) {
 std::vector<Token> incrementBonus(std::vector<Token> token_list) {
 	for (Token &cur_token : token_list) {
 		if (cur_token.type == num_token) {
-			int temp; 
-			temp = std::stoi(cur_token.value) + 1; 
+			int temp;
+			temp = std::stoi(cur_token.value) + 1;
 
-			// std::string zs; 
+			// std::string zs;
 			// std::ostringstream ss;
 
 			// ss << std::fixed << std::setprecision() << temp;
@@ -130,6 +130,9 @@ std::vector<Token> incrementBonus(std::vector<Token> token_list) {
 int main () {
 	std::string line;
 	std::vector<Token> previous_expr; // for bonus
+
+	std::vector<Token> prefix_list;
+	std::vector<Token> postfix_list;
 	//TODO: error handling
 	std::cout << "Please enter an expression: ";
 	while (std::getline(std::cin >> std::ws, line)) {
@@ -141,8 +144,7 @@ int main () {
 		//We're gonna pass this stream to the tokeniser / lexer / parser
 		std::istringstream cur_line(line);
 
-		std::vector<Token> prefix_list;
-		std::vector<Token> postfix_list;
+
 
 
 
@@ -153,29 +155,29 @@ int main () {
 				continue;
 			}
 			//we assume it's a valid and already in postfix.
-			postfix_list = incrementBonus(previous_expr);
+			prefix_list = incrementBonus(previous_expr);
+			postfix_list = toPostfix(prefix_list);
 
 		} else {
 
 			//Gets a list of tokens in infix notation, which is hard to parse.
 			prefix_list = parse_char(cur_line);
 
-			//We run a validator on the infix tokens, and make sure the input was valid.
-			// if not, ask again.
-			if (validator(prefix_list) == false) {
-				std::cout << "\n\nPlease enter a valid expression: ";
-				continue;
-			}
-
 			//convert the tokens to postfix notation, bc its easier to make a tree this way.
 			postfix_list = toPostfix(prefix_list);
-
-
-
 		}
 
-		previous_expr = postfix_list;
+		//We run a validator on the infix tokens, and make sure the input was valid.
+		// if not, ask again.
 
+		if (validator(prefix_list) == false) {
+			std::cout << "\n\nPlease enter a valid expression: ";
+			continue;
+		}
+
+		previous_expr = prefix_list;
+
+		//std::for_each(prefix_list.begin(), prefix_list.end(), &print_token); // <- For testing.
 		//starting point of the tree (root?)
 		ArithmeticExpression *tree = new ArithmeticExpression;
 
@@ -191,7 +193,6 @@ int main () {
 		//free up the memory.
 		deleteTree(tree); // will delete everything, including that *tree ^^.
 
-		//std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr); // <- For testing.
 		std::cout << "\n\nPlease enter an expression: ";
 	}
 }

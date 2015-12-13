@@ -45,8 +45,10 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 		} else if (c == '(' && next == '-' ) { //negative numbers (-70) - (-1)
 
 			listOfTokens.push_back(lex_paren(our_stream)); //pop the paren 
-
-			listOfTokens.push_back(lex_negnum(our_stream));
+			listOfTokens.push_back({num_token, "0"}); 
+			listOfTokens.push_back({sub_token, "-"});
+			our_stream.get();
+			//listOfTokens.push_back(lex_negnum(our_stream));
 
 		} else if (c == '(') {
 			listOfTokens.push_back(lex_paren(our_stream));
