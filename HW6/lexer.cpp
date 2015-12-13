@@ -36,6 +36,9 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 			our_stream.get();
 
 		} else if (c == '(' && next == '-' ) { //negative numbers (-70) - (-1)
+
+			listOfTokens.push_back(lex_paren(our_stream)); //pop the paren 
+
 			listOfTokens.push_back(lex_negnum(our_stream));
 
 		} else if (c == '(') {
@@ -60,7 +63,6 @@ std::vector<Token> parse_char(std::istream& our_stream) {
 //Returns a negative number token.
 Token lex_negnum(std::istream& our_stream) {
 	char c;
-	our_stream.get(); //should be a paren. discard it. 
 	our_stream.get(c); //should be a negative sign.
 
 	std::string number;
@@ -70,7 +72,6 @@ Token lex_negnum(std::istream& our_stream) {
 		our_stream.get(x);
 		number.push_back(x);
 	}
-	our_stream.get(); //should be closing paren. discard
 	return {num_token, number};
 }
 

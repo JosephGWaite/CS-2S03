@@ -184,7 +184,7 @@ int main () {
 		std::cout << " = " << tree->evaluate();
 
 		//free up the memory.
-		deleteTree(tree); // will delete everything.
+		deleteTree(tree); // will delete everything, including that *tree ^^.
 
 		//std::for_each(postfix_list.begin(), postfix_list.end(), &print_expr); // <- For testing.
 		std::cout << "\n\nPlease enter an expression: ";
